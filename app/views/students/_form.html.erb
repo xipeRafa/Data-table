@@ -1,0 +1,36 @@
+<%= form_with(model: student, local: true) do |form| %>
+  <div class="form-group">
+    <%= form.label :first_name %>
+    <%= form.text_field :first_name, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :middle_name %>
+    <%= form.text_field :middlename, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :last_name %>
+    <%= form.text_field :last_name, class: 'form-control' %>
+  </div>
+
+  <div class="field">
+      <%= form.label "Is active?" %>
+      <%= form.check_box :isactive %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :classroom %>
+    <% if current_user.role == 'admin' %>
+      <%= form.collection_select(:classroom_id, Classroom.where(school_id: current_user.school_id), :id, :subject, {:prompt => 'Select Classroom'}, class: 'form-control', :selected => @student.classroom_id)%>
+    <% elsif current_user.role == 'teacher' %>
+      <%= form.collection_select(:classroom_id, Classroom.where(user_id: current_user.id), :id, :subject, {:prompt => 'Select Classroom'}, class: 'form-control', :selected => @student.classroom_id)%>
+    <% end %>
+    <%= form.label 'Dont see your classroom?' %>
+    <%= link_to 'Add it!', new_classroom_path %>
+  </div>
+
+  <div class="form-group">
+    <%= form.submit 'Save Student', class: 'btn btn-primary' %>
+  </div>
+<% end %>

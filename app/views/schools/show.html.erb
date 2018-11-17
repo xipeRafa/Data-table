@@ -1,0 +1,43 @@
+<div class="card-body">
+
+<h1 class="card-header" >Grades classroom</h1>
+
+<p class="list-group-item" >
+  <strong>Name:</strong>
+   <%= @school.name %> 
+</p>
+
+<p class="list-group-item" >
+  <strong>City:</strong>
+   <%= @school.city %> 
+</p>
+
+<p class="list-group-item" >
+  <strong>State:</strong>
+  <%= @school.state %> 
+</p>
+
+<p class="list-group-item" >
+  <strong>Zip:</strong>
+  <%= @school.zip %> 
+</p>
+
+<p class="list-group-item" >
+  <strong>School District:</strong>
+   <%= @school.schooldistrict.name %> 
+</p>
+
+<p class="list-group-item" >
+  <strong>Staff:</strong>
+  <% @school.users.each do |data| %>
+  <p>
+       <%= data.full_name %> 
+  </p>
+  <% end %>
+</p>
+
+<p class="mt-3 text-center">
+<%= link_to 'Edit', edit_school_path(@school), class: 'btn btn-primary' %> 
+<%= link_to 'Back', schools_path, class: 'btn btn-primary' %>
+</p>
+</div>

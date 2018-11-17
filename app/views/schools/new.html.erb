@@ -1,0 +1,9 @@
+<h1 class="card-header my-5">New School</h1>
+
+<%= render 'form', school: @school %>
+
+<% if (current_user)  %>
+  <%= link_to 'Back', :back %>
+<% else %>
+  <%= link_to 'Back', new_user_registration_path %>
+<% end %>

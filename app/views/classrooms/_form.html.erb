@@ -1,0 +1,47 @@
+<div class="form-group">
+<% if @classroom.id %>
+  <h3 class="card-header my-1">Editing <strong><%= "#{@classroom.subject} (#{@classroom.term.upcase})" %>'s</strong> data</h3>
+  <h3 class="card-header my-1">At <strong><%= current_user.school.name %>'s</strong>, <strong> <%= @classroom.students.count %></strong> student(s) signed up.</h3>
+<% end %>
+</div>
+
+<%= form_with(model: classroom, local: true) do |form| %>
+  <div class="form-group">
+    <%= form.label :subject%>
+    <%= form.text_field :subject, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :grade %>
+    <%= form.collection_select(:grade_id, Grade.where(school_id: current_user.school_id), :id, :name,
+      {:prompt => 'Select school grade'}, class: 'form-control', :selected => @classroom.grade_id)%>
+      <% if current_user.role == 'teacher' %>
+        <%= 'Grade not shown? Contact your school admin.' %>
+      <% elsif current_user.role == 'admin' %>
+        <%= 'Grade not shown? ' %><%= link_to('Add it!', new_grade_path) %>
+      <%end%>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :term %>
+    <%= form.select :term, options_for_select(Classroom.terms.keys, class: 'form-control'),
+    {},{class:"form-control m-b", style:"text-transform: capitalize"} %>
+  </div>
+
+  <% if current_user.role == "admin"%>
+    <div class="form-group">
+      <%= form.label "Teacher" %>
+      <%= form.collection_select(:user_id, User.where(school_id: current_user.school_id).reject { |usr| usr.role == "admin"}, :id, :full_name, {:prompt => 'Select Teacher'},
+        class: 'form-control', :selected => @classroom.user_id)%>
+    </div>
+  <% else %>
+  <div class="form-group">
+    <%= form.label "Teacher" %>
+    <%= form.text_field :user, value: current_user.full_name, class: 'form-control',   :disabled =>true%>
+  </div>
+  <% end%>
+
+  <div class="form-group">
+    <%= form.submit 'Update Classroom', class: 'btn btn-primary' %>
+  </div>
+<% end %>

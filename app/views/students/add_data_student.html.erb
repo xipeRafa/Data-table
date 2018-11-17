@@ -1,0 +1,38 @@
+<h3>Attach data to <strong><%= @student.full_name %></strong></h3>
+
+    <%= form_with(model: @studentdatum, url: post_data_to_student_path, local: true) do |form| %>
+      <div class="form-group">
+        <%= form.label :title %>
+        <%= form.text_field :title, class: 'form-control' %>
+      </div>
+      <div class="form-group">
+        <%= form.label :text %>
+        <%= form.text_area :text, class: 'form-control' %>
+      </div>
+      <div class="form-group">
+        <%= form.label :student %>
+        <%= form.collection_select(:student_id, Student.all, :id, :full_name, {:prompt => 'Select Student'},
+        class: 'form-control', :selected => :student_id )%>
+      </div>
+      <div class="form-group">
+        <%= form.label :classroom %>
+        <%= form.collection_select(:classroom_id, Classroom.where(id: @student.classroom_id), :id,
+        :subject, {:prompt => 'Select Classroom'}, class: 'form-control',
+        :selected => :classroom_id )%>
+      </div>
+
+
+    <div class="form-group">
+      <%= form.submit 'Attach data', class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+  <%= link_to 'Back', :back %>
+
+  <% content_for :js do %>
+    <script type="text/javascript">
+    $(document).ready(function () {
+        document.getElementById('studentdatum_student_id').setAttribute("readonly", "")
+        document.getElementById('studentdatum_classroom_id').setAttribute("readonly", "")
+    })
+    </script>
+  <% end %>

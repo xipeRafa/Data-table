@@ -1,0 +1,5 @@
+<h3 class="card-header my-5">Filling out a new student for <strong><%= current_user.school.name %></strong>.</h3>
+
+<%= render 'form', student: @student %>
+
+<%= link_to 'Back', :back %>

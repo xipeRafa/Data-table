@@ -1,0 +1,25 @@
+<%= form_with(model: schooldistrict, local: true) do |form| %>
+  <div class="form-group">
+    <%= form.label :name %>
+    <%= form.text_field :name, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :city %>
+    <%= form.text_field :city, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :state %>
+    <%= form.collection_select(:state,  CS.states(:us).values, :to_s, :to_s, {:prompt => 'Select state'}, class: 'form-control', :selected => @schooldistrict.state)%>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :zip %>
+    <%= form.number_field :zip, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.submit "Add New School District", class: 'btn btn-primary' %>
+  </div>
+<% end %>

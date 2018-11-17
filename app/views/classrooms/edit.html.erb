@@ -1,0 +1,4 @@
+<%= render 'form', classroom: @classroom %>
+
+<%= link_to 'Back', :back %> |
+<%= link_to 'Archive', archive_path, method: :put, data: { confirm: 'Do you really want to archive class?' } %>

@@ -1,0 +1,6 @@
+<h3 class="card-header my-1">Fill out a new class!</h3>
+<h3 class="card-header my-1">Class being filled for school <strong><%= current_user.school.name %></strong>.</h3>
+
+<%= render 'form', classroom: @classroom %>
+
+<%= link_to 'Back', classrooms_path %>

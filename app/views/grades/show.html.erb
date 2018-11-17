@@ -1,0 +1,20 @@
+<p id="notice alert-success text-center"><%= notice %></p>
+
+<div class="card-body">
+
+<h1 class="card-header" >Grades </h1>
+<p class="list-group-item">
+  <strong>Name:</strong>
+  <%= @grade.name %>
+</p>
+
+<p class="list-group-item">
+  <strong>School:</strong>
+  <%= @grade.school.name %>
+</p>
+
+<p class="mt-3 text-center">
+<%= link_to 'Edit', edit_grade_path(@grade), class: 'btn btn-primary'%> 
+<%= link_to 'Back', grades_path, class: 'btn btn-primary'%>
+</p>
+</div>

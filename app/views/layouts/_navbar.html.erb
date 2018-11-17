@@ -1,0 +1,80 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5 ">
+    <div class="" >
+      <% if user_signed_in? %>
+         <h1 class="h4 mt-2" >
+          <%= link_to "Teacher Data", root_path, id: "logo", class: "  " %>
+         </h1>
+      <% else %>
+        <h1 class="h4 mt-2">
+         <%= link_to "Teacher Data", static_pages_home_path, id: "logo", class: "" %>
+         </h1>
+      <% end %> 
+    </div>
+      
+      <button class="navbar-toggler rounded-0 border-primary" type="button" data-toggle="collapse"  data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    
+    <% if user_signed_in? %> 
+     
+    <nav class="d-flex flex-column flex-lg-row ml-auto  text-center" >
+
+      <% if current_user.role == 'superadmin' %> 
+       <ul class="navbar-nav ">
+        <li class="nav-item dropdown ">
+        <a class="nav-link hover-a text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Menu
+        </a>
+        <div class="dropdown-menu bg-dark" style="margin-top:9.5px;"aria-labelledby="navbarDropdown">
+         <%= link_to('Dashboard', dashboard_path, class: "p-2 hover-a") %> 
+         <%= link_to('Students', students_path, class: "p-2 hover-a d-block") %> 
+        <%= link_to('School Districts', schooldistricts_path, class: "p-2 hover-a d-block") %>    
+        </li>
+        </ul>
+        <%= link_to('Admin', "/admin", class: "p-2 hover-a") %>
+      <% elsif current_user.role == 'admin' %>
+
+        <%= link_to('Dashboard', dashboard_path, class: "p-2 hover-a") %>
+        <%= link_to('Grades', grades_path, class: "p-2 hover-a") %>        
+        <%= link_to('Classrooms', classrooms_path, class: "p-2 hover-a") %>
+        <%= link_to('Students', students_path, class: "p-2 hover-a") %>
+
+      <% elsif current_user.role == 'teacher' %>
+        <%= link_to('Dashboard', dashboard_path, class: "p-2 hover-a") %>
+        <%= link_to('Classrooms', classrooms_path, class: "p-2 hover-a") %>
+        <%= link_to('Students', students_path, class: "p-2 hover-a") %>
+      <% end %>
+    </nav>
+    
+  <div class="mx-2 d-flex justify-content-center ">
+      <%= form_tag students_path, method: :get, class: "form-inline  my-2 my-lg-0"  do %>
+        <%= text_field_tag "query", params[:query], placeholder: "Search Student", class: "form-control col-7 text-left ml-3 rounded-0" %>
+        <button class="btn btn-outline-success col-4 rounded-0" type="submit">Search</button>
+      <% end %>
+    </div>
+ 
+
+
+    <div class="d-flex flex-row  align-items-center justify-content-center">
+       <%= link_to edit_user_registration_path, class: "size-icon fas fa-edit mb-1 d-flex flex-row " do %>
+          <%= content_tag :span, "Edit", :class => "fz-icons ml-1 mt-1" %>
+        <% end %>
+        <%= link_to destroy_user_session_path, method: :delete, class: "size-icon fas fa-sign-out-alt d-flex flex-row " do %>
+          <%= content_tag :span, "Logout", :class => "fz-icons ml-2" %>
+        <% end %>
+    </div>
+
+  <% else %>
+
+    <div class="col-12 d-flex flex-row ml-auto align-items-center justify-content-center justify-content-lg-end">
+         <%= render partial: "layouts/navbar_links" %>
+    </div>
+  <% end %>
+  
+  </div>
+ </nav>
+ 
+
+             

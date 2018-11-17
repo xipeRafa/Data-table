@@ -1,0 +1,64 @@
+<%= form_with(model: school, local: true) do |form| %>
+
+  <div class="form-group">
+    <%= form.label :school_district %>
+    <%= form.collection_select(:schooldistrict_id, Schooldistrict.all, :id, :name,
+    {:prompt => 'Select School'}, class: 'form-control', :selected => @school.schooldistrict_id)%>
+    <%= form.label 'School district not shown?' %>
+    <%= link_to 'Add it!', new_schooldistrict_path %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :name %>
+    <%= form.text_field :name, class: 'form-control' %>
+  </div>
+
+<div class="row">
+  <div class="form-group col-4">
+    <%= form.label :state %>
+    <%= form.text_field :state, class: 'form-control',id: 'school_state', :disabled => true %>
+  </div>
+
+  <div class="form-group col-4">
+    <%= form.label :city %>
+    <%= form.text_field :city, class: 'form-control',id: 'school_city', :disabled => true %>
+  </div>
+
+  <div class="form-group col-4">
+    <%= form.label :zip %>
+    <%= form.number_field :zip, class: 'form-control', id: 'school_zip', :disabled => true %>
+  </div>
+
+
+  </div>
+    <div class="form-group">
+    <%= form.submit 'Add New School', class: 'btn btn-primary' %>
+  </div>
+
+<% end %>
+
+<% content_for :js do %>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $("#school_schooldistrict_id").change(function() {
+        let id = $(this).val();
+        if (id) {
+          $.ajax({
+            type: "GET", 
+            url: "../schooldistricts/" + $(this).val(),
+            dataType: 'json',
+            success: function(data) {
+              $("#school_state").val(data.state);
+              $("#school_city").val(data.city);
+              $("#school_zip").val(data.zip);
+            }
+          })
+        } else {
+          $("#school_state").val("");
+          $("#school_city").val("");
+          $("#school_zip").val("");
+        }
+      });
+    });
+  </script>
+<% end %>

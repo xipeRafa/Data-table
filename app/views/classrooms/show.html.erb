@@ -1,0 +1,75 @@
+<div class="row mb-5 align-items-center justify-content-center align-items-center">
+
+    <div class="list-group-item d-flex flex-column text-center buttons rounded-0  my-2" >
+        <%= link_to 'Edit Class', edit_classroom_path(@classroom.id), class: 'btn btn-warning my-1' %> 
+        <small >Edit class data</small>      
+        <% if !@classroom.archived %>
+          <%= link_to 'Archive Class', archive_path, class: 'btn btn-danger my-1', method: :put, data: { confirm: 'Do you really want to archive class?' } %>
+          <small ><span style="color:red;">(irreversible)</span></small>
+        <% end %>
+      </div>
+
+
+      <div class="col-lg-7 col-md-6 text-center my-2 text-center ">
+          <% if current_user.role == 'teacher' %>
+            <h2><strong><%= @classroom.subject %></strong></h2>
+            <% if @classroom.archived %>
+              <h5 style="color:gray"><strong>(Class archived)</strong></h5>
+            <%else%>
+              <h3>You're marked as teacher accross <strong><%= current_user.school.grades.count%> different</strong> grades.</h3>              
+            <% end %>
+          <% elsif current_user.role == 'admin' %>
+           <h2><%= @classroom.subject %> <strong>(<%= @classroom.term.upcase %>)</strong> <%= @classroom.grade.name %></h2>
+           <h4>By teacher, <strong><%= @classroom.user.full_name %></strong>.</h4>
+            <% if @classroom.archived %>
+                <h5 style="color:gray"><strong>(Class archived)</strong></h5>
+              <%else%>
+                <h4>There's currently <strong><%= @classroom.students.count %> student(s)</strong> registered for this classroom.</h4>
+            <% end %>
+          <% end %>
+      </div>
+
+      <div class="list-group-item d-flex flex-column text-center buttons rounded-0  my-2" >
+          <%= link_to 'Documents', "#", class: 'btn btn-info my-1' %> 
+          <small >Class files</small>      
+          <%= link_to 'Add data', add_data_to_classroom_path(@classroom.id), class: 'btn btn-success my-1' %>
+          <small >Select students</small>
+          <%= link_to 'Upload', "#", class: 'btn btn-primary my-1' %>
+          <small >Class content file</small>     
+        </div>
+</div>    
+
+<table class="table table-responsive-md" id="classroom-students-datatable" data-source="<%= classroom_path(format: :json) %>">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Attached Data (by me)</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+  
+    <tbody>
+    </tbody>
+  </table>
+
+<% content_for :js do %>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#classroom-students-datatable').dataTable({
+      "processing": true,
+      "serverSide": true,
+      "ajax": $('#classroom-students-datatable').data('source'),
+      "columns": [
+        {"data": "full_name"},
+      //  {"data": "grade"},
+        {"data": "status"},
+        {"data": "studentdata"},
+        {"data": "actions"}
+      //  {"data": "is_active"},
+      //  {"data": "edit"}
+      ]
+    });
+  });
+</script>
+<% end %>

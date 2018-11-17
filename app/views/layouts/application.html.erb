@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= yield(:title) %> | Teacher Data</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload'  %>
+  </head>
+
+  <body>
+    <%= render 'layouts/navbar' %>
+    <div class="container">
+      <%= render 'layouts/errors' %>
+
+      <%= yield %>
+      
+      <pre>
+        <%= debug(params) if Rails.env.development? %>
+      </pre>
+    </div>
+      
+    <%= yield :js %>
+        <script>
+    $(document).ready(function () {
+    $(".alert-danger").fadeTo(2000, 1500).slideUp(1500, function(){
+    $(".alert-danger").slideUp(500);
+});
+    $(".alert-success").fadeTo(2000, 1500).slideUp(1500, function(){
+    $(".alert-success").slideUp(1500);
+});
+    })
+
+    </script>
+    
+  </body>
+</html>

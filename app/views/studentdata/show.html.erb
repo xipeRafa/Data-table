@@ -1,0 +1,21 @@
+<div class="card-body">
+
+<h1 class="card-header" >Studentdata</h1>
+
+<p class="list-group-item">
+  <strong>Title:</strong>
+  <%= @studentdatum.title %>
+</p>
+
+<p class="list-group-item">
+  <strong>Text:</strong>
+  <%= @studentdatum.text %>
+</p>
+
+
+
+<p class="mt-3 text-center">
+<%= link_to 'Edit', edit_studentdatum_path(@studentdatum), class: 'btn btn-primary' %> |
+<%= link_to 'Back', studentdata_path, class: 'btn btn-primary' %>
+</p>
+</div>

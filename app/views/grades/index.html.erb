@@ -1,0 +1,67 @@
+<h1 class="alert alert-primary text-center">Grades</h1>
+<% if (current_user.school.grades.count > 0 if current_user.school.present?) %>
+  <!-- STUDETNS BY GRADE -->
+  <ul class="mt-5 nav nav-tabs" id="myTab" role="tablist">
+    <% current_user.school.grades.each do |grade| %>
+     <% if Student.includes(:classroom).references(:classroom).where("students.classroom_id IN (?) AND classrooms.grade_id =?", (current_user.school.classrooms.pluck(:id)), grade.id).count > 0 %>
+	      <li class="nav-item col-6 col-sm-4 text-center">
+	        <a class="nav-link p-3 border-bottom" id="home-tab" data-toggle="tab"
+	          href="#grade<%= grade.id %>" role="tab" aria-controls="home" aria-selected="true">
+	          <%= grade.name %>
+	        </a>
+	      </li>
+	<% end %>
+    <% end %>
+  </ul>
+  <div class="tab-content">
+ 	<% if current_user.school.present? %>
+	    <% current_user.school.grades.each do |grade| %>
+	      <% if Student.includes(:classroom).references(:classroom).where("students.classroom_id IN (?) AND classrooms.grade_id =?", (current_user.school.classrooms.pluck(:id)), grade.id).count > 0 %>
+			      <div class="tab-pane fade" id="grade<%= grade.id %>" role="tabpanel" >
+			        <table class="table" id="students-datatable-<%= grade.id %>" data-source="<%= grade_path(format: :json, id: grade.id) %>">
+			          <thead>
+			            <tr>
+			              <th>Name</th>
+			              <th>Classroom</th>
+			              <th>Attached Data</th>
+			            </tr>
+			          </thead>
+			          <tbody>
+			          </tbody>
+			        </table>
+			      </div>
+
+		      <% content_for :js do %>
+		        <script type="text/javascript">
+		          $(document).ready(function() {
+		            $('#students-datatable-<%= grade.id %>').dataTable({
+		              "processing": true,
+		              "serverSide": true,
+		              "ajax": $('#students-datatable-<%= grade.id %>').data('source'),
+		              "columns": [
+		                {"data": "full_name"},
+		                {"data": "subject"},
+		                {"data": "data"}
+		              ]
+		            });
+		          });
+		        </script>
+		      <% end %>
+		<% end %>
+	    <% end %>  
+    <% end %>  
+  </div>
+<%else%>
+  <h3 class="alert alert-primary">There are no grades for this school.</h3>
+ 	<% if current_user.school.present? %> 	
+	  <%= form_for('Grades', as: current_user.school.grades, url: set_grades_path) do |f| %>
+	    <div class="form-group">
+	      <%= f.submit "Create default grades!", class: "btn btn-primary" %>
+	    </div>
+	  <% end %>
+    <% end %>  
+  <h6>Or add them <%= link_to 'manually', new_grade_path %>.</h6>
+<% end %>
+
+
+    <%#= yield :js %>

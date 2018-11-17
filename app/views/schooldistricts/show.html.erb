@@ -1,0 +1,32 @@
+<div class="card-body">
+
+<h1 class="card-header">School District</h1>
+
+<p class="list-group-item">
+  <strong>Name:</strong>
+  <%= @schooldistrict.name %>
+</p>
+
+<p class="list-group-item">
+  <strong>State:</strong>
+  <%= @schooldistrict.state %>
+</p>
+
+<p class="list-group-item">
+  <strong>City:</strong>
+  <%= @schooldistrict.city %>
+</p>
+
+<p class="list-group-item">
+  <strong>Zip:</strong>
+  <%= @schooldistrict.zip %>
+</p>
+
+<p class="mt-3 text-center">
+<%= link_to 'Edit', edit_schooldistrict_path(@schooldistrict), class: 'btn btn-primary' %> |
+<%= link_to 'Back', schooldistricts_path, class: 'btn btn-primary' %>
+</p>
+</div>
+
+
+

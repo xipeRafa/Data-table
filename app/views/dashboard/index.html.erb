@@ -1,0 +1,128 @@
+<script src = "https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" >
+<h1  class="alert alert-primary dashboard text-dark">Hello, <%= current_user.email %></h1>
+
+
+  <% if current_user.role == 'superadmin' %>
+  <hr>
+      <table class="table table-responsive-md"  id="user-datatable">
+        <tr>
+          <th>Email</th>
+          <th>Full Name</th>
+          <th>Paid Subscription Name</th>
+          <th>Subscription Expiration Date</th>
+          <th>Created At</th>
+          <th>School Name</th>
+        </tr>
+       
+        <% @users.each do |user| %>
+          <tr>
+            <td><%= user.email %></td>
+            <td><%= user.full_name %></td>
+            <td></td>
+            <td></td>
+            <td><%= user.created_at %></td>
+            <td><%= user.school.present? ? user.school.name : "No School" %></td>
+          </tr>
+        <% end %>
+      </table>
+
+  <% end %>
+
+ <hr>
+<% if current_user.role == 'teacher' %>
+  <% if (current_user.school.grades.count > 0 if current_user.school.present?) %>
+  <ul class="mt-5 nav" id="myTab" role="tablist">
+
+  <%  if current_user.school.present? %>
+    <% current_user.school.grades.each do |grade| %>
+            <% if Student.includes(:classroom).references(:classroom).where("students.classroom_id IN (?) AND classrooms.grade_id =?", (current_user.school.classrooms.pluck(:id)), grade.id).count > 0 %>
+                <li class="nav-item col-6 col-sm-4 text-center">
+                  <a class="nav-link p-3 border-bottom" id="home-tab" data-toggle="tab"
+                    href="#grade<%= grade.id %>" role="tab" aria-controls="home" aria-selected="true">
+                    <%= grade.name %>
+                  </a>
+                </li>
+            <% end %>
+    <% end %>
+  <% end %>
+
+  </ul>
+ 
+  <div class="tab-content" id="myTabContent">
+    <% current_user.school.grades.each do |grade| %>
+      <% if Student.includes(:classroom).references(:classroom).where("students.classroom_id IN (?) AND classrooms.grade_id =?", (current_user.school.classrooms.pluck(:id)), grade.id).count > 0 %>
+                <div class="tab-pane fade " id="grade<%= grade.id %>" role="tabpanel" >
+                  <table class="table" id="users-datatable-<%= grade.id %>" data-source="<%= teachers_dashboard_path(format: :json, id: grade.id) %>">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+               <% content_for :js do %>
+                <script type="text/javascript">
+                  $(document).ready(function() {
+                    $('#users-datatable-<%= grade.id %>').dataTable({
+                      "processing": true,
+                      "serverSide": true,
+                      "ajax": $('#users-datatable-<%= grade.id %>').data('source'),
+                      "columns": [
+                        {"data": "full_name"}
+                      ]
+                    });
+                  });
+                </script>
+                <% end %>
+              <% end %>  
+      <% end %>
+
+  </div>
+  <% else %>
+    <%= 'Ask the school admin to add some grades!' %>  
+  <% end %>
+
+
+<% elsif current_user.role == 'admin'%>
+  <% if (current_user.school.grades.count > 0) %><!-- GRADES -->
+   <!-- SCHOOL USERS DATATABLE -->
+    <div class="row mt-5 ">
+      <% current_user.school.grades.each do |grade| %>
+      <div class="col-6 col-sm-4 text-center" >
+        <h6 class="nav-link border-bottom pt-2 pb-3"><%= link_to grade.name %></h6>
+        <% grade.users.each do |user| %>
+         <%= user.full_name %>
+        <% end %>
+      </div>
+    <% end %>
+    </div>
+<%else%>
+  <h3 class="alert alert-primary">There are no grades for this school.</h3>
+  <%= form_for('Grades', as: current_user.school.grades, url: set_grades_path) do |f| %>
+    <div class="form-group">
+      <%= f.submit "Create default grades!", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+  <h6>Or add them <%= link_to 'manually', new_grade_path %>.</h6>
+<% end %>
+<% end %>
+
+<% content_for :js do %>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#user-datatable').dataTable();
+    $.fn.dataTable.ext.errMode = 'none';
+    $('#users-datatable').dataTable({
+      "processing": true,
+      "serverSide": true,
+      "ajax": $('#users-datatable').data('source'),
+      "columns": [
+        {"data": "full_name"}
+      ]
+    });
+  });
+</script>
+<% end %>

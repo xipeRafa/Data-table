@@ -1,0 +1,72 @@
+<div class="row mb-5 d-flex justify-content-center align-items-center ">
+
+    <div class="list-group-item d-flex flex-column text-center buttons rounded-0  my-2" >
+      <%= link_to 'Add Class', new_classroom_path, class: 'btn btn-success my-1 ' %> 
+      <small >Fill out a new class.</small>      
+    </div> 
+
+    <div class="col-lg-7 col-md-6 text-center my-2">
+    <% if current_user.role == 'teacher' %>
+     <h2>Teacher's <strong><%= current_user.full_name %></strong> Classrooms</h2>
+     <h3>You're marked as teacher accross <strong><%= current_user.school.grades.count%> different</strong> grades.</h3>
+    <% elsif current_user.role == 'admin' %>
+     <h2><strong><%= current_user.school.name %>'s</strong> classrooms!</h2>
+     <h4>There's <strong><%= current_user.school.classrooms.count %> different</strong>  classrooms registered across 
+     <strong><%= current_user.school.grades.count if current_user.school.present? %> different</strong> grades.</h4>
+     <h4>Currently, <strong><%= current_user.school.users.where(role: 'teacher').count if current_user.school.present? %> user(s)</strong> marked as <strong>Teacher</strong>.</h4>
+    <% end %>
+    </div>
+
+    <div class="list-group-item d-flex flex-column  buttons text-center rounded-0 my-2" >
+      <%= link_to 'Documents', "#", class: 'btn btn-info my-1' %>
+      <small>All classes files</small>      
+      
+    </div>
+    
+</div>
+
+<% if current_user.school.present? %>   
+<% if current_user.school.classrooms.count > 0 %>
+  <table class="table table-responsive-md" id="classrooms-datatable" data-source="<%= school_path(format: :json, id: current_user.school_id) %>">
+    <thead>
+      <tr>
+        <th>Subject</th>
+        <th>Grade</th>
+        <th>Teacher</th>
+        <th>Students</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+    </tbody>
+  </table>
+<% else %>
+  <h3 class="alert alert-primary">No classrooms registered for this school.</h3>
+<% end %>
+<% end %>
+
+<% content_for :js do %>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $.fn.dataTable.ext.errMode = 'none';
+      $('#classrooms-datatable').dataTable({
+        "processing": true,
+        "serverSide": true,
+        "ajax": $('#classrooms-datatable').data('source'),
+        "columns": [
+          {"data": "subject"},
+          {"data": "grade"},
+          {"data": "teacher"},
+          {"data": "students"},
+          {"data": "archived"}
+         // {"data": "subject"},
+        //  {"data": "student"}, 
+        ///  {"data": "actions"},
+        //  {"data": "show"},
+        //  {"data": "delete"}
+        ]
+      });
+    });
+  </script>
+<% end %>

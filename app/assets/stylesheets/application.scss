@@ -1,0 +1,147 @@
+@import "bootstrap";
+
+@import "datatables";
+
+body {
+  background-color: whitesmoke;
+  font-family: sans-serif;
+  user-select: none;
+  overflow-x: hidden;
+ 
+}
+nav * {
+  color: #fff;
+  display: block;
+  text-align: center;
+  
+}
+nav *:hover {
+  color: #fff;
+}
+a:hover {
+  text-decoration-line: none;
+}
+* {
+  outline: none !important;
+  -moz-outline-style: none !important;
+}
+
+.splash {
+  width: 100%;
+  height: 8rem;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.content {
+  padding-top: 20px;
+  height: 9.8rem;
+  background: rgb(1, 93, 150);
+  background: -webkit-linear-gradient(
+    to right,
+    rgb(140, 183, 226),
+    rgb(0, 87, 141)
+  );
+  background: linear-gradient(to right, rgb(96, 145, 194), rgb(0, 67, 143));
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 90%, 0% 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 0% 100%);
+}
+
+table.dataTable {
+  width: 100% !important;
+}
+
+.buttons {
+  max-width: 70%;
+  min-width: 11rem;
+}
+.card-width {
+  min-width: 18rem;
+  max-width: 18rem;
+  margin: 1rem;
+}
+.dashboard {
+  font-size: 4vw;
+}
+@media (max-width: 700px) {
+  .dashboard {
+    font-size: 6vw;
+  }
+}
+@media (min-width: 2300px) {
+  .dashboard {
+    font-size: 2.3vw;
+  }
+}
+//--icons-nav-------
+.fz-icons {
+  font-family: sans-serif;
+  font-size: 1.4rem;
+  color:#fff;
+  margin: 0;
+  padding: 0;
+}
+.size-icon {
+  color:#fff;
+  font-size: 1.7rem;
+  margin: 0 0.8rem;
+}
+.signup-icon {
+  font-size: 1.5rem;
+  margin: 0 0.8rem;
+}
+
+.hover-a:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.green {
+  background-color: green;
+}
+
+.red {
+  background-color: red;
+}
+.blue {
+  background-color: blue;
+}
+
+.z-index-2 {
+  z-index: 2;
+}
+
+//---------footer----------
+.center-text {
+  padding-left: 20%;
+}
+@media (max-width: 766px) {
+  .center-text {
+    padding-left: 41%;
+  }
+}
+@media (max-width: 490px) {
+  .center-text {
+    padding-left: 36%;
+  }
+}
+@media (max-width: 360px) {
+  .center-text {
+    padding-left: 32%;
+  }
+}
+.border-top-gray {
+  border-top: 1px solid gray;
+}
+
+a.fas.fa-user-plus.signup-icon,
+a.fas.fa-sign-in-alt.size-icon,
+{
+  color: white;
+}
+
+.footer{
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
+ }

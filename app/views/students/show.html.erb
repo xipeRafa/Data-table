@@ -1,0 +1,62 @@
+
+<div class="row mb-5 align-items-center">
+    <div class="list-group-item d-flex flex-column  buttons" style="text-align:center;">
+        <%= link_to 'Sign up', '#', class: 'btn btn-success my-1' %> 
+        <small >Add to classroom</small>
+        <%= link_to 'Add data', add_data_to_student_path(@student.id), class: 'btn btn-info my-1' %> 
+        <small >Attach student data</small>     
+      </div> 
+      <div class="col-lg-8 text-center ">
+           <h2>Student <strong><%= @student.full_name %>'s</strong></h2>
+           <h4>Signed up currently for <strong><%= @student.classroom.subject %> (<%= @student.classroom.term.upcase %>)</strong>.<br>
+            By <strong> <%= @student.classroom.user.full_name %></strong></h4>
+           <h4><strong><%= @student.studentdatum.count %> different</strong> data titles found.</h4>
+          </div>
+          <div class="list-group-item d-flex flex-column  buttons" style="text-align:center;">
+              <%= link_to 'Edit', edit_student_path(@student.id), class: 'btn btn-warning my-1' %>
+              <small>Edit student data</small>
+              <%= link_to 'Upload', '#', class: 'btn btn-primary my-1' %>
+              <small>Class content file</small>
+          </div>
+</div>
+
+<% if @student.studentdatum.count > 0 %>
+  <table class="table" id="studentdata-datatable" data-source="<%= student_path(format: :json) %>">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Text</th>
+        <th>Given At</th>
+        <th>Creation Date</th>
+
+      </tr>
+    </thead>
+
+    <tbody>
+    </tbody>
+  </table>
+<% end %>
+
+
+<% content_for :js do %>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#studentdata-datatable').dataTable({
+        "processing": true,
+        "serverSide": true,
+        "ajax": $('#studentdata-datatable').data('source'),
+        "columns": [
+          {"data": "title"},
+          {"data": "text"},
+          {"data": "classroom"},
+          {"data": "created_at"}
+          /*{"data": "title"},
+          {"data": "text"},
+          {"data": "classroom"},
+          {"data": "teacher"},
+          {"data": "date"}*/
+        ]
+      });
+    });
+  </script>
+<% end %>

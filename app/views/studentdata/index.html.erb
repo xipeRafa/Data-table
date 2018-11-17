@@ -1,0 +1,33 @@
+<h1 class="card-header my-5">Student Data</h1>
+
+<table class="table table-responsive-md">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Text</th>
+      <th>Student</th>
+      <th>User</th>
+      <th>Classroom</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @studentdata.each do |studentdatum| %>
+      <tr>
+        <td><%= studentdatum.title %></td>
+        <td><%= studentdatum.text %></td>
+        <td><%= studentdatum.student.full_name %></td>
+        <td><%= studentdatum.user.full_name %></td>
+        <td><%= studentdatum.classroom.subject %></td>
+        <td><%= link_to 'Show', studentdatum %></td>
+        <td><%= link_to 'Edit', edit_studentdatum_path(studentdatum) %></td>
+        <td><%= link_to 'Destroy', studentdatum, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Student Data', new_studentdatum_path %>

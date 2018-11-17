@@ -1,0 +1,68 @@
+<div class="row mb-5 align-items-center justify-content-center align-items-center">
+
+  <div class="list-group-item d-flex flex-column  buttons rounded-0 text-center my-2">
+    <%= link_to 'Add Student', new_student_path, class: 'btn btn-success my-1' %> 
+    <small >Register a new student.</small>      
+  </div>
+
+  <div class="col-lg-7 col-md-5 text-center rounded-0 my-2">
+    <h2><strong><%= current_user.school.name if current_user.school.present? %></strong> students!</h2>      
+    <h3>There's currently <strong><%= @students.count %> student(s)</strong> registered.</h3>
+  </div>
+
+  <div class="list-group-item d-flex flex-column  buttons rounded-0 text-center my-2">
+    <%#%= link_to 'Documents', classrooms_path, class: 'btn btn-success my-1' %>
+    <%#%= link_to 'Upload', classrooms_path, class: 'btn btn-success my-1' %>
+    <%= link_to 'Students Report', "#", class: 'btn btn-info my-1' %>
+      <small>Download report</small>
+    <%= link_to 'Upload', "#", class: 'btn btn-primary my-1' %>
+    <small >Global's students file</small>
+  </div>
+
+</div>
+<% if current_user.school.present? %>
+<% if (current_user.school.students.count > 0)%>
+<table class="table table-responsive-md" id="students-datatable" data-source="<%= students_path(query: params[:query], format: :json) %>">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Classroom</th>
+      <th>Grade</th>
+      <th>Status</th>
+      <th>Attached Data</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  </tbody>
+</table>
+<% else %>
+<h3 class="alert alert-danger">No students registered for this school.</h3>
+<% end %>
+<% end %>
+
+
+<% content_for :js do %>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $.fn.dataTable.ext.errMode = 'none';
+      $('#students-datatable').dataTable({
+        "processing": true,
+        "serverSide": true,
+        "ajax": $('#students-datatable').data('source'),
+        "columns": [
+          {"data": "full_name"},
+        //  {"data": "grade"},
+          {"data": "classroom"},
+          {"data": "grade"},
+          {"data": "status"},
+          {"data": "studentdata"}
+        //  {"data": "is_active"},
+        //  {"data": "edit"}
+        ]
+      });
+    });
+  </script>
+<% end %>
+
+ <%= yield :js %>
